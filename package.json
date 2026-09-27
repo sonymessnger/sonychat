@@ -1,0 +1,43 @@
+{
+  "name": "sonychat",
+  "version": "1.0.0",
+  "description": "SonyChat Messenger",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "build": {
+    "appId": "com.sonychat.messenger",
+    "productName": "SonyChat",
+    "win": {
+      "icon": "public/icon.png",
+      "target": "portable"
+    },
+    "files": [
+      "main.js",
+      "server.js",
+      "routes/**/*",
+      "models/**/*",
+      "public/**/*",
+      ".env"
+    ],
+    "asarUnpack": [
+      "node_modules/sqlite3/**/*",
+      "node_modules/nodemailer/**/*"
+    ]
+  },
+  "dependencies": {
+    "bcryptjs": "*",
+    "cors": "*",
+    "dotenv": "*",
+    "express": "*",
+    "jsonwebtoken": "*",
+    "nodemailer": "*",
+    "socket.io": "*",
+    "sqlite3": "*"
+  },
+  "devDependencies": {
+    "electron": "*",
+    "electron-builder": "^26.15.3"
+  }
+}

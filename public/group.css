@@ -1,0 +1,123 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #313338;
+  color: #dbdee1;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+}
+
+.container { width: 100%; max-width: 500px; }
+
+.card {
+  background: #2b2d31;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+  color: #fff;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #949ba4;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+.create-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.create-form input {
+  flex: 1;
+  padding: 12px 14px;
+  background: #1e1f22;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 15px;
+}
+.create-form input:focus { outline: 2px solid #5865f2; }
+
+.create-form button {
+  background: #5865f2;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 15px;
+}
+.create-form button:hover { background: #4752c4; }
+
+#message {
+  min-height: 20px;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.section-label {
+  color: #949ba4;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin: 20px 0 10px;
+}
+
+.groups-list { list-style: none; }
+
+.groups-list li {
+  padding: 12px 15px;
+  background: #1e1f22;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  color: #dbdee1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.groups-list li:hover { background: #383a40; }
+
+.groups-list li.empty {
+  color: #949ba4;
+  text-align: center;
+  cursor: default;
+}
+.groups-list li.empty:hover { background: #1e1f22; }
+
+.groups-list .group-name { font-weight: bold; color: #fff; }
+
+.groups-list .group-author { font-size: 12px; color: #949ba4; }
+
+.back-btn {
+  background: #4e5058;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+  margin-top: 20px;
+  font-size: 15px;
+}
+.back-btn:hover { background: #6d6f78; }
+
+@media (max-width: 600px) {
+  body { padding: 20px 10px; }
+  .card { padding: 20px; }
+}

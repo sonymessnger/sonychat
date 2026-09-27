@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Создать группу</title>
+  <link rel="stylesheet" href="group.css">
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Группы</h1>
+      <p class="subtitle">Создайте новую или зайдите в существующую</p>
+
+      <div class="create-form">
+        <input type="text" id="groupName" placeholder="Название группы..." maxlength="30">
+        <button id="createBtn">Создать</button>
+      </div>
+
+      <p id="message"></p>
+
+      <div class="section-label">Все группы</div>
+      <ul class="groups-list" id="groupsList">
+        <li class="empty">Пока нет ни одной группы</li>
+      </ul>
+
+      <button class="back-btn" id="backBtn">← Назад в чат</button>
+    </div>
+  </div>
+
+  <script src="group.js"></script>
+</body>
+</html>

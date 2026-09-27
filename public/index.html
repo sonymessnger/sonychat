@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SonyChat</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="card">
+
+  <div class="step" id="step1">
+    <h1>SonyChat</h1>
+    <p class="subtitle">Регистрация</p>
+    <input type="email" id="email" placeholder="Ваш email">
+    <button id="sendCodeBtn">Получить код</button>
+    <p class="msg" id="msg1"></p>
+    <p class="switch">Уже есть аккаунт? <a href="#" id="toLogin">Войти</a></p>
+  </div>
+
+  <div class="step" id="step2" style="display:none">
+    <h1>Введите код</h1>
+    <p class="subtitle">Код отправлен на <span id="emailLabel"></span></p>
+    <input type="text" id="code" placeholder="6-значный код" maxlength="6">
+    <button id="checkCodeBtn">Далее</button>
+    <p class="msg" id="msg2"></p>
+    <p class="switch"><a href="#" id="back1">← Назад</a></p>
+  </div>
+
+  <div class="step welcome" id="step3" style="display:none">
+    <div class="welcome-icon">✨</div>
+    <h1>Добро пожаловать<br>в SonyChat!</h1>
+    <p class="subtitle">Давайте настроим ваш профиль</p>
+    <button id="startSetupBtn">Продолжить</button>
+  </div>
+
+  <div class="step" id="step4" style="display:none">
+    <h1>Выберите аватар</h1>
+    <p class="subtitle">Нажмите на понравившийся</p>
+    <div class="avatar-grid" id="avatarGrid"></div>
+    <input type="file" id="photoInput" accept="image/*" style="display:none">
+    <button class="secondary" id="uploadBtn">Или загрузить фото</button>
+    <button id="avatarNextBtn" disabled>Далее</button>
+    <p class="msg" id="msg4"></p>
+  </div>
+
+  <div class="step" id="step5" style="display:none">
+    <h1>Ваш профиль</h1>
+    <p class="subtitle">Придумайте имя пользователя</p>
+    <div class="avatar-preview" id="chosenAvatar"></div>
+    <input type="text" id="username" placeholder="Имя пользователя" maxlength="20">
+    <input type="password" id="password" placeholder="Пароль">
+    <button id="finishBtn">Зарегистрироваться</button>
+    <p class="msg" id="msg5"></p>
+  </div>
+
+  <div class="step" id="loginBox" style="display:none">
+    <h1>Вход</h1>
+    <p class="subtitle">Рады видеть снова!</p>
+    <input type="text" id="loginUsername" placeholder="Имя пользователя">
+    <input type="password" id="loginPassword" placeholder="Пароль">
+    <button id="loginBtn">Войти</button>
+    <p class="msg" id="loginMsg"></p>
+    <p class="switch">Нет аккаунта? <a href="#" id="toRegister">Регистрация</a></p>
+  </div>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

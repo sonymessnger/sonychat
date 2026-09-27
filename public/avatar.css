@@ -1,0 +1,116 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 20px;
+  background: linear-gradient(180deg, #1a5a9a 0%, #3a7ec0 30%, #6aaae0 60%, #a8d4f0 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.card {
+  width: 100%;
+  max-width: 380px;
+  padding: 50px 30px 30px 30px;
+  text-align: center;
+  background: linear-gradient(180deg,
+    rgba(255,255,255,0.55) 0%,
+    rgba(220,240,255,0.4) 50%,
+    rgba(200,230,255,0.5) 100%);
+  border: 1px solid rgba(255,255,255,0.8);
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 8px 30px rgba(0,40,90,0.5);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  position: relative;
+}
+
+.card::before {
+  content: 'Аватар';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 32px;
+  background: linear-gradient(180deg,
+    rgba(255,255,255,0.5) 0%,
+    rgba(200,225,255,0.35) 45%,
+    rgba(150,195,235,0.45) 46%,
+    rgba(180,215,245,0.35) 100%);
+  border-bottom: 1px solid rgba(255,255,255,0.6);
+  border-radius: 8px 8px 0 0;
+  text-align: left;
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a3d6a;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.9);
+}
+
+h1 {
+  color: #1a3d6a;
+  font-size: 20px;
+  margin-bottom: 15px;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.9);
+}
+
+.avatar-preview {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin: 15px auto;
+  background: linear-gradient(135deg, #7ac0f0, #4a90d0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 60px;
+  font-weight: bold;
+  background-size: cover;
+  background-position: center;
+  border: 4px solid #fff;
+  box-shadow: 0 6px 20px rgba(0,40,90,0.5);
+  text-shadow: 0 2px 4px rgba(0,30,70,0.4);
+}
+
+.choose, .back {
+  width: 100%;
+  padding: 10px 15px;
+  margin-top: 10px;
+  border: 1px solid #7ba7ce;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  color: #1a3d6a;
+  background: linear-gradient(180deg,
+    #f4faff 0%,
+    #d8ecfa 45%,
+    #a8d0ea 46%,
+    #c8e0f4 100%);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.95);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.95), 0 1px 2px rgba(0,50,120,0.25);
+}
+
+.choose {
+  color: #fff;
+  background: linear-gradient(180deg,
+    #a8d4f4 0%,
+    #6ab0e0 45%,
+    #3a80c0 46%,
+    #4a90d0 100%);
+  border-color: #3a6fa8;
+  text-shadow: 0 -1px 1px rgba(0,50,100,0.5);
+}
+
+#message {
+  min-height: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a8a1a;
+  margin: 10px 0;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.9);
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Групповой чат</title>
+  <link rel="stylesheet" href="chat.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="profile">
+        <div class="avatar" id="userAvatar">A</div>
+        <div class="user-info">
+          <div class="username" id="currentUser">admin</div>
+          <div class="status">● онлайн</div>
+        </div>
+      </div>
+      <div class="section-title">Группа</div>
+      <ul class="contacts">
+        <li class="contact active">
+          <div class="avatar small" style="background:#8b5cf6">Г</div>
+          <span id="sideGroupName">Группа</span>
+        </li>
+      </ul>
+      <button class="logout" id="backBtn">← Назад</button>
+    </aside>
+
+    <main class="chat">
+      <header class="chat-header">
+        <div class="avatar small" style="background:#8b5cf6">Г</div>
+        <div>
+          <div class="chat-title" id="groupTitle">Группа</div>
+          <div class="chat-subtitle" id="groupSubtitle">Групповой чат</div>
+        </div>
+      </header>
+
+      <div class="messages" id="messages">
+        <div class="system-msg">Добро пожаловать в группу!</div>
+      </div>
+
+      <div class="input-area">
+        <input type="file" id="fileInput" accept="image/*" style="display:none">
+        <button class="attach-btn" id="attachBtn" title="Отправить картинку">📎</button>
+        <input type="text" id="messageInput" placeholder="Написать сообщение...">
+        <button id="sendBtn">➤</button>
+      </div>
+    </main>
+  </div>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="group-chat.js"></script>
+</body>
+</html>

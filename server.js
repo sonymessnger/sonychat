@@ -17,10 +17,13 @@ app.use(express.json({ limit: '5mb' }));
 
 const db = new sqlite3.Database('./messenger.db');
 
-db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT, avatar TEXT, email TEXT)');
+db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT, avatar TEXT, email TEXT, is_admin INTEGER DEFAULT 0, banned INTEGER DEFAULT 0)');
 db.all("PRAGMA table_info(users)", function(err, cols) {
-  if (cols && !cols.find(function(c){ return c.name === 'avatar'; })) db.run("ALTER TABLE users ADD COLUMN avatar TEXT");
-  if (cols && !cols.find(function(c){ return c.name === 'email'; })) db.run("ALTER TABLE users ADD COLUMN email TEXT");
+  if (!cols) return;
+  if (!cols.find(function(c){ return c.name === 'avatar'; })) db.run("ALTER TABLE users ADD COLUMN avatar TEXT");
+  if (!cols.find(function(c){ return c.name === 'email'; })) db.run("ALTER TABLE users ADD COLUMN email TEXT");
+  if (!cols.find(function(c){ return c.name === 'is_admin'; })) db.run("ALTER TABLE users ADD COLUMN is_admin INTEGER DEFAULT 0");
+  if (!cols.find(function(c){ return c.name === 'banned'; })) db.run("ALTER TABLE users ADD COLUMN banned INTEGER DEFAULT 0");
 });
 
 db.run('CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, text TEXT, type TEXT, created_at INTEGER)');
@@ -42,13 +45,20 @@ transporter.verify(function(error) {
 
 const verificationCodes = {};
 
+// ===== ОНЛАЙН-ПОЛЬЗОВАТЕЛИ =====
+const onlineUsers = {}; // { socketId: username }
+
 app.use('/api/auth', authRoutes(db));
 
-// Отправка кода на email
+function isAdmin(username, cb) {
+  db.get('SELECT is_admin FROM users WHERE username = ?', [username], function(err, row) {
+    cb(row && row.is_admin === 1);
+  });
+}
+
 app.post('/api/send-code', function(req, res) {
   const email = req.body.email;
   if (!email) return res.status(400).json({ message: 'Введите email' });
-
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   verificationCodes[email] = { code: code, expires: Date.now() + 10 * 60 * 1000, verified: false };
 
@@ -65,15 +75,11 @@ app.post('/api/send-code', function(req, res) {
   };
 
   transporter.sendMail(mailOptions, function(error) {
-    if (error) {
-      console.log('Ошибка:', error.message);
-      return res.status(500).json({ message: 'Не удалось отправить письмо' });
-    }
+    if (error) return res.status(500).json({ message: 'Не удалось отправить письмо' });
     res.json({ message: 'Код отправлен' });
   });
 });
 
-// Проверка кода
 app.post('/api/check-code', function(req, res) {
   const { email, code } = req.body;
   const stored = verificationCodes[email];
@@ -84,33 +90,38 @@ app.post('/api/check-code', function(req, res) {
   res.json({ ok: true });
 });
 
-// Финальная регистрация
 app.post('/api/verify-register', async function(req, res) {
   const { username, password, email, code, avatar } = req.body;
   if (!username || !password || !email || !code) return res.status(400).json({ message: 'Заполните все поля' });
+  if (password.length < 6) return res.status(400).json({ message: 'Пароль минимум 6 символов' });
+
   const stored = verificationCodes[email];
-  if (!stored) return res.status(400).json({ message: 'Сначала запросите код' });
-  if (!stored.verified) return res.status(400).json({ message: 'Сначала подтвердите код' });
+  if (!stored || !stored.verified) return res.status(400).json({ message: 'Сначала подтвердите код' });
 
   try {
     const hashed = await bcrypt.hash(password, 10);
-    db.run('INSERT INTO users (username, password, email, avatar) VALUES (?, ?, ?, ?)',
-      [username, hashed, email, avatar || ''],
-      function(err) {
-        if (err) {
-          if (err.message.includes('UNIQUE')) return res.status(400).json({ message: 'Пользователь уже есть' });
-          return res.status(500).json({ message: 'Ошибка сервера' });
-        }
-        delete verificationCodes[email];
-        res.status(201).json({ message: 'Пользователь создан!' });
-      });
+    db.get('SELECT COUNT(*) as cnt FROM users', [], function(err, row) {
+      const isFirst = row && row.cnt === 0;
+      const isAdminFlag = isFirst ? 1 : 0;
+
+      db.run('INSERT INTO users (username, password, email, avatar, is_admin) VALUES (?, ?, ?, ?, ?)',
+        [username, hashed, email, avatar || '', isAdminFlag],
+        function(err) {
+          if (err) {
+            if (err.message.includes('UNIQUE')) return res.status(400).json({ message: 'Пользователь уже есть' });
+            return res.status(500).json({ message: 'Ошибка сервера' });
+          }
+          delete verificationCodes[email];
+          res.status(201).json({ message: 'Пользователь создан!', isAdmin: isFirst });
+        });
+    });
   } catch (e) {
     res.status(500).json({ message: 'Ошибка сервера' });
   }
 });
 
 app.get('/api/users', function(req, res) {
-  db.all('SELECT username, avatar FROM users', [], function(err, rows) { res.json(rows || []); });
+  db.all('SELECT username, avatar, is_admin, banned FROM users', [], function(err, rows) { res.json(rows || []); });
 });
 
 app.get('/api/users/:username/avatar', function(req, res) {
@@ -120,11 +131,89 @@ app.get('/api/users/:username/avatar', function(req, res) {
   });
 });
 
+app.get('/api/me/:username', function(req, res) {
+  db.get('SELECT username, avatar, is_admin FROM users WHERE username = ?', [req.params.username], function(err, row) {
+    if (err || !row) return res.status(404).json({});
+    res.json(row);
+  });
+});
+
 app.post('/api/users/avatar', function(req, res) {
   db.run('UPDATE users SET avatar = ? WHERE username = ?', [req.body.avatar, req.body.username], function(err) {
     if (err) return res.status(500).json({});
     io.emit('avatar_updated', { username: req.body.username, avatar: req.body.avatar });
     res.json({ ok: true });
+  });
+});
+
+app.post('/api/delete-my-account', function(req, res) {
+  const { username, password } = req.body;
+  if (!username || !password) return res.status(400).json({ message: 'Нет данных' });
+
+  db.get('SELECT password FROM users WHERE username = ?', [username], async function(err, row) {
+    if (err || !row) return res.status(404).json({ message: 'Пользователь не найден' });
+
+    const ok = await bcrypt.compare(password, row.password);
+    if (!ok) return res.status(400).json({ message: 'Неверный пароль' });
+
+    db.run('DELETE FROM users WHERE username = ?', [username]);
+    db.run('DELETE FROM messages WHERE username = ?', [username]);
+    db.run('DELETE FROM private_messages WHERE from_user = ? OR to_user = ?', [username, username]);
+    db.run('DELETE FROM group_messages WHERE username = ?', [username]);
+
+    io.emit('user_deleted', { username: username });
+    res.json({ ok: true });
+  });
+});
+
+app.delete('/api/messages/:id', function(req, res) {
+  const id = req.params.id;
+  const username = req.body.username;
+  if (!username) return res.status(400).json({ message: 'Нет пользователя' });
+
+  db.get('SELECT username FROM messages WHERE id = ?', [id], function(err, row) {
+    if (err || !row) return res.status(404).json({ message: 'Сообщение не найдено' });
+
+    isAdmin(username, function(admin) {
+      if (row.username !== username && !admin) {
+return res.status(403).json({ message: 'Можно удалять только свои сообщения' });
+      }
+      db.run('DELETE FROM messages WHERE id = ?', [id], function(err2) {
+        if (err2) return res.status(500).json({ message: 'Ошибка сервера' });
+        io.emit('message_deleted', { id: parseInt(id) });
+        res.json({ ok: true });
+      });
+    });
+  });
+});
+
+app.post('/api/admin/delete-user', function(req, res) {
+  const { adminName, targetUser } = req.body;
+  isAdmin(adminName, function(admin) {
+    if (!admin) return res.status(403).json({ message: 'Нет прав' });
+    if (adminName === targetUser) return res.status(400).json({ message: 'Нельзя удалить себя' });
+
+    db.run('DELETE FROM users WHERE username = ?', [targetUser], function(err) {
+      if (err) return res.status(500).json({ message: 'Ошибка' });
+      db.run('DELETE FROM messages WHERE username = ?', [targetUser]);
+      db.run('DELETE FROM private_messages WHERE from_user = ? OR to_user = ?', [targetUser, targetUser]);
+      io.emit('user_deleted', { username: targetUser });
+      res.json({ ok: true });
+    });
+  });
+});
+
+app.post('/api/admin/ban-user', function(req, res) {
+  const { adminName, targetUser, ban } = req.body;
+  isAdmin(adminName, function(admin) {
+    if (!admin) return res.status(403).json({ message: 'Нет прав' });
+    if (adminName === targetUser) return res.status(400).json({ message: 'Нельзя забанить себя' });
+
+    db.run('UPDATE users SET banned = ? WHERE username = ?', [ban ? 1 : 0, targetUser], function(err) {
+      if (err) return res.status(500).json({ message: 'Ошибка' });
+      io.emit('user_banned', { username: targetUser, banned: ban ? 1 : 0 });
+      res.json({ ok: true });
+    });
   });
 });
 
@@ -167,12 +256,26 @@ app.use(express.static('public'));
 app.get('/', function(req, res) { res.send('OK'); });
 
 io.on('connection', function(socket) {
+  // Пользователь зашёл — сохраняем его в онлайн
+  socket.on('user_connected', function(username) {
+    onlineUsers[socket.id] = username;
+    io.emit('online_list', Object.values(onlineUsers));
+  });
+
+  // Пользователь начал печатать
+  socket.on('typing', function(data) {
+    socket.broadcast.emit('user_typing', data);
+  });
+
   socket.on('send_message', function(data) {
-    data.time = Date.now();
-    db.run('INSERT INTO messages (username, text, type, created_at) VALUES (?,?,?,?)', [data.user, data.text || '', data.type || 'text', data.time], function(err) {
-      if (err) { io.emit('new_message', data); return; }
-      data.id = this.lastID;
-      io.emit('new_message', data);
+    db.get('SELECT banned FROM users WHERE username = ?', [data.user], function(e, row) {
+      if (row && row.banned === 1) return;
+      data.time = Date.now();
+      db.run('INSERT INTO messages (username, text, type, created_at) VALUES (?,?,?,?)', [data.user, data.text || '', data.type || 'text', data.time], function(err) {
+        if (err) { io.emit('new_message', data); return; }
+        data.id = this.lastID;
+        io.emit('new_message', data);
+      });
     });
   });
 
@@ -194,6 +297,12 @@ io.on('connection', function(socket) {
       if (err) return;
       io.to('g_' + data.groupId).emit('new_group_message', data);
     });
+  });
+
+  // Пользователь отключился
+  socket.on('disconnect', function() {
+    delete onlineUsers[socket.id];
+    io.emit('online_list', Object.values(onlineUsers));
   });
 });
 

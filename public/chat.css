@@ -499,3 +499,42 @@ body::before {
   .delete-msg-btn { opacity: 1; font-size: 14px; }
   .bubble:hover { transform: none; }
 }
+/* Зелёная точка онлайна */
+.avatar { position: relative; }
+.online-dot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background: #23a55a;
+  border: 2px solid #2d1b4e;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(35, 165, 90, 0.9);
+  animation: onlinePulse 2s ease-in-out infinite;
+}
+.avatar.small .online-dot { width: 10px; height: 10px; }
+
+@keyframes onlinePulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(35, 165, 90, 0.9); }
+  50% { box-shadow: 0 0 14px rgba(35, 165, 90, 1); }
+}
+
+/* Индикатор "печатает" */
+.typing-indicator {
+  padding: 8px 16px;
+  font-size: 13px;
+  color: #a88cc0;
+  font-style: italic;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+.typing-indicator .dots {
+  animation: dotsBlink 1.4s infinite;
+  letter-spacing: 2px;
+}
+@keyframes dotsBlink {
+  0%, 20% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
+}

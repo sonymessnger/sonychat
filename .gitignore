@@ -1,10 +1,12 @@
 node_modules/
+node_modules_old/
 dist/
 build/
 .env
 messenger.db
-messenger.exe
-cloudflared.exe
-cloudflared-windows-amd64.exe
 *.log
 .vscode/
+android/.gradle/
+android/app/build/
+android/build/
+.gradle/

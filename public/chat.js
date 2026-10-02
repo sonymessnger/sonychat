@@ -44,7 +44,6 @@ function renderMyAvatar() {
 currentUserEl.textContent = username;
 renderMyAvatar();
 
-// Сообщаем серверу, что зашли
 socket.emit('user_connected', username);
 
 fetch('/api/me/' + username).then(function(r){ return r.json(); }).then(function(data) {
@@ -85,8 +84,6 @@ async function loadContacts() {
     if (u.username === username) return;
     const li = document.createElement('li');
     li.className = 'contact' + (currentChat === u.username ? ' active' : '');
-    const isOnline = onlineUsers.has(u.username);
-    const dot = isOnline ? '<span class="online-dot"></span>' : '';
     li.innerHTML = avatarHTML(u.username, 'small') + '<span>' + u.username + (u.is_admin === 1 ? ' 👑' : '') + '</span>';
     li.onclick = function() { switchChat(u.username); };
     contactsList.appendChild(li);
@@ -197,13 +194,9 @@ function send() {
   if (currentChat === 'general') socket.emit('send_message', { user: username, type: 'text', text: text });
   else socket.emit('send_private', { from: username, to: currentChat, type: 'text', text: text });
   inputEl.value = '';
-
-  // Сообщаем, что перестали печатать
   socket.emit('typing', { user: username, chat: currentChat, isTyping: false });
 }
 sendBtn.onclick = send;
-
-// Индикатор "печатает"
 inputEl.oninput = function() {
   socket.emit('typing', { user: username, chat: currentChat, isTyping: true });
   clearTimeout(typingTimeout);
@@ -239,7 +232,6 @@ socket.on('message_deleted', function(data) {
   if (el) el.remove();
 });
 
-// Обновляем список онлайн-пользователей
 socket.on('online_list', function(list) {
   onlineUsers.clear();
   list.forEach(function(u) { onlineUsers.add(u); });
@@ -249,7 +241,6 @@ socket.on('online_list', function(list) {
   }
 });
 
-// Индикатор "печатает"
 socket.on('user_typing', function(data) {
   if (data.chat !== currentChat) return;
   if (data.user === username) return;
@@ -269,7 +260,6 @@ socket.on('user_typing', function(data) {
   }
 });
 
-// Профиль
 messagesEl.addEventListener('click', function(e) {
   const av = e.target.closest('.avatar');
   if (!av) return;
@@ -307,7 +297,7 @@ function showProfile(name) {
   modal.classList.add('show');
 }
 
-// Меню профиля
+// ===== МЕНЮ СВОЕГО ПРОФИЛЯ =====
 const myProfileMenu = document.getElementById('myProfileMenu');
 const myMenuClose = document.getElementById('myMenuClose');
 
@@ -328,10 +318,58 @@ userAvatarEl.onclick = function() {
 myMenuClose.onclick = function() { myProfileMenu.classList.remove('show'); };
 myProfileMenu.onclick = function(e) { if (e.target === myProfileMenu) myProfileMenu.classList.remove('show'); };
 
-document.getElementById('menuChangeAvatar').onclick = function() {
-  window.location.href = 'create-avatar.html';
+// ===== СМЕНА АВАТАРА ПРЯМО В ЧАТЕ (работает в APK) =====
+const avatarFileInput = document.getElementById('avatarFileInput');
+const menuChangeAvatarBtn = document.getElementById('menuChangeAvatar');
+
+menuChangeAvatarBtn.onclick = function() {
+  avatarFileInput.click();
 };
 
+avatarFileInput.onchange = function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) {
+    alert('Файл больше 5 МБ');
+    avatarFileInput.value = '';
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function() {
+    const img = new Image();
+    img.onload = function() {
+      const c = document.createElement('canvas');
+      c.width = 200;
+      c.height = 200;
+      const ctx = c.getContext('2d');
+      const s = Math.min(img.width, img.height);
+      ctx.drawImage(img, (img.width - s) / 2, (img.height - s) / 2, s, s, 0, 0, 200, 200);
+      const data = c.toDataURL('image/jpeg', 0.85);
+
+      fetch('/api/users/avatar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: username, avatar: data })
+      }).then(function(r) {
+        if (r.ok) {
+          avatars[username] = data;
+          renderMyAvatar();
+          loadContacts();
+          alert('Аватар обновлён! 🎃');
+          myProfileMenu.classList.remove('show');
+        } else {
+          alert('Ошибка сохранения');
+        }
+      });
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+  avatarFileInput.value = '';
+};
+
+// ===== УДАЛЕНИЕ АККАУНТА =====
 document.getElementById('menuDeleteAccount').onclick = async function() {
   const password = prompt('Введите пароль для подтверждения удаления:');
   if (!password) return;

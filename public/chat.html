@@ -10,9 +10,10 @@
 <div class="app">
   <aside class="sidebar">
     <div class="profile">
-      <div class="avatar" id="userAvatar" title="Сменить аватар">A</div>
+      <div class="avatar" id="userAvatar" title="Меню профиля">A</div>
       <div><div class="username" id="currentUser">admin</div><div class="status">● онлайн</div></div>
     </div>
+
     <div class="section-title">Чаты</div>
     <ul class="contacts" id="contactsList"></ul>
     <button class="logout" id="logoutBtn">Выйти</button>
@@ -31,6 +32,19 @@
     </div>
   </main>
 </div>
+
+<!-- МЕНЮ СВОЕГО ПРОФИЛЯ (с выбором аватара прямо в чате) -->
+<div class="my-profile-menu" id="myProfileMenu">
+  <div class="my-profile-content">
+    <div class="my-profile-avatar" id="myMenuAvatar">A</div>
+    <h3 class="my-profile-name" id="myMenuName">admin</h3>
+    <input type="file" id="avatarFileInput" accept="image/*" style="display:none">
+    <button class="menu-action" id="menuChangeAvatar">🖼 Сменить аватар</button>
+    <button class="menu-action danger" id="menuDeleteAccount">🗑 Удалить аккаунт</button>
+    <button class="menu-cancel" id="myMenuClose">Отмена</button>
+  </div>
+</div>
+
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 <script src="chat.js"></script>
 </body>

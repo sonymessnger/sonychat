@@ -401,26 +401,30 @@ loadAvatars().then(function() { loadContacts(); loadGeneral(); });
 const bottomNav = document.getElementById('bottomNav');
 const backBtn = document.getElementById('backBtn');
 
-// Открыть список чатов (как на главном экране)
 function openChatList() {
   if (sidebarEl) {
     sidebarEl.classList.add('open');
   }
 }
 
-// Закрыть список чатов
 function closeChatList() {
   if (sidebarEl) {
     sidebarEl.classList.remove('open');
   }
 }
 
-// Кнопка "Назад" в шапке чата — возвращает к списку
+// Кнопка "Назад" — возвращает к списку чатов
 if (backBtn) {
-  backBtn.onclick = function() {
-    closeChatList();
+  backBtn.onclick = function(e) {
+    e.preventDefault();
+    e.stopPropagation();
     openChatList();
   };
+}
+
+// При выборе чата — закрываем список
+function onChatSelected() {
+  closeChatList();
 }
 
 // Нижняя навигация
@@ -429,7 +433,6 @@ if (bottomNav) {
     btn.onclick = function() {
       const tab = this.dataset.tab;
 
-      // Снимаем активный класс со всех
       document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
       this.classList.add('active');
 
@@ -442,9 +445,9 @@ if (bottomNav) {
   });
 }
 
-// На мобильных — при открытии показываем список чатов
+// На мобильных — при запуске показываем список чатов
 if (window.innerWidth <= 600) {
   setTimeout(function() {
     openChatList();
-  }, 300);
+  }, 200);
 }

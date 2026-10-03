@@ -397,3 +397,54 @@ document.getElementById('menuDeleteAccount').onclick = async function() {
 logoutBtn.onclick = function() { localStorage.clear(); window.location.href = 'index.html'; };
 
 loadAvatars().then(function() { loadContacts(); loadGeneral(); });
+// ===== МОБИЛЬНАЯ НАВИГАЦИЯ =====
+const bottomNav = document.getElementById('bottomNav');
+const backBtn = document.getElementById('backBtn');
+
+// Открыть список чатов (как на главном экране)
+function openChatList() {
+  if (sidebarEl) {
+    sidebarEl.classList.add('open');
+  }
+}
+
+// Закрыть список чатов
+function closeChatList() {
+  if (sidebarEl) {
+    sidebarEl.classList.remove('open');
+  }
+}
+
+// Кнопка "Назад" в шапке чата — возвращает к списку
+if (backBtn) {
+  backBtn.onclick = function() {
+    closeChatList();
+    openChatList();
+  };
+}
+
+// Нижняя навигация
+if (bottomNav) {
+  document.querySelectorAll('.nav-btn').forEach(function(btn) {
+    btn.onclick = function() {
+      const tab = this.dataset.tab;
+
+      // Снимаем активный класс со всех
+      document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+
+      if (tab === 'chats') {
+        openChatList();
+      } else if (tab === 'calls') {
+        alert('📞 Звонки скоро появятся!\n\nМы работаем над этой функцией. Следите за обновлениями! 🎃');
+      }
+    };
+  });
+}
+
+// На мобильных — при открытии показываем список чатов
+if (window.innerWidth <= 600) {
+  setTimeout(function() {
+    openChatList();
+  }, 300);
+}

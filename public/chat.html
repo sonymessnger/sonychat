@@ -8,18 +8,20 @@
 </head>
 <body>
 <div class="app">
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="profile">
       <div class="avatar" id="userAvatar" title="Меню профиля">A</div>
       <div><div class="username" id="currentUser">admin</div><div class="status">● онлайн</div></div>
     </div>
-
     <div class="section-title">Чаты</div>
     <ul class="contacts" id="contactsList"></ul>
     <button class="logout" id="logoutBtn">Выйти</button>
   </aside>
-  <main class="chat">
+
+  <main class="chat" id="mainChat">
     <header class="chat-header">
+      <button class="back-btn" id="backBtn">←</button>
+      <button class="menu-btn" id="menuBtn">☰</button>
       <div class="avatar small" id="chatAvatar">О</div>
       <div><div class="chat-title" id="chatTitle">Общий чат</div><div class="chat-subtitle" id="chatSubtitle">Все пользователи</div></div>
     </header>
@@ -33,7 +35,19 @@
   </main>
 </div>
 
-<!-- МЕНЮ СВОЕГО ПРОФИЛЯ (с выбором аватара прямо в чате) -->
+<!-- НИЖНЯЯ НАВИГАЦИЯ (только на телефоне) -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="nav-btn active" data-tab="chats">
+    <span class="nav-icon">💬</span>
+    <span class="nav-label">Чаты</span>
+  </button>
+  <button class="nav-btn" data-tab="calls">
+    <span class="nav-icon">📞</span>
+    <span class="nav-label">Звонки</span>
+  </button>
+</nav>
+
+<!-- МЕНЮ СВОЕГО ПРОФИЛЯ -->
 <div class="my-profile-menu" id="myProfileMenu">
   <div class="my-profile-content">
     <div class="my-profile-avatar" id="myMenuAvatar">A</div>

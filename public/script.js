@@ -7,7 +7,20 @@ function showStep(id) {
 let regEmail = '';
 let regCode = '';
 let regAvatar = '';
+let captchaA = 0;
+let captchaB = 0;
 
+// ===== КАПЧА =====
+function generateCaptcha() {
+  captchaA = Math.floor(Math.random() * 10) + 1;
+  captchaB = Math.floor(Math.random() * 10) + 1;
+  const el = document.getElementById('captchaQuestion');
+  if (el) el.textContent = captchaA + ' + ' + captchaB + ' = ?';
+  const input = document.getElementById('captchaAnswer');
+  if (input) input.value = '';
+}
+
+// ШАГ 1: отправить код
 const msg1 = document.getElementById('msg1');
 document.getElementById('sendCodeBtn').onclick = async function() {
   const email = document.getElementById('email').value.trim();
@@ -38,6 +51,7 @@ document.getElementById('sendCodeBtn').onclick = async function() {
   this.textContent = 'Получить код';
 };
 
+// ШАГ 2: проверить код
 const msg2 = document.getElementById('msg2');
 document.getElementById('checkCodeBtn').onclick = async function() {
   const code = document.getElementById('code').value.trim();
@@ -65,11 +79,13 @@ document.getElementById('checkCodeBtn').onclick = async function() {
 
 document.getElementById('back1').onclick = function(e) { e.preventDefault(); showStep('step1'); };
 
+// ШАГ 3: добро пожаловать
 document.getElementById('startSetupBtn').onclick = function() {
   buildAvatarGrid();
   showStep('step4');
 };
 
+// ШАГ 4: аватар
 const EMOJIS = ['😀','🐱','🐶','🦊','🐼','🦁','🐸','🐵','🦄','🐧','🐨','🐯','🦉','🐢','🐙','🦋'];
 const COLORS = ['#5865f2','#ef4444','#10b981','#f59e0b','#ec4899','#06b6d4','#8b5cf6','#84cc16'];
 
@@ -136,17 +152,28 @@ document.getElementById('avatarNextBtn').onclick = function() {
   const el = document.getElementById('chosenAvatar');
   el.style.background = 'url("' + regAvatar + '") center/cover';
   el.textContent = '';
+  generateCaptcha();
   showStep('step5');
 };
 
+// ШАГ 5: финальная регистрация + проверка капчи
 document.getElementById('finishBtn').onclick = async function() {
   const username = document.getElementById('username').value.trim();
   const password = document.getElementById('password').value.trim();
   const msg = document.getElementById('msg5');
 
+  // Проверка капчи
+  const answer = document.getElementById('captchaAnswer').value.trim();
+  if (parseInt(answer) !== captchaA + captchaB) {
+    msg.textContent = '❌ Неверный ответ на капчу';
+    msg.style.color = '#ff5050';
+    generateCaptcha();
+    return;
+  }
+
   if (!username || !password) { msg.textContent = 'Заполните все поля'; msg.style.color = '#f23f43'; return; }
   if (username.length < 3) { msg.textContent = 'Имя от 3 символов'; msg.style.color = '#f23f43'; return; }
-  if (password.length < 4) { msg.textContent = 'Пароль от 4 символов'; msg.style.color = '#f23f43'; return; }
+  if (password.length < 6) { msg.textContent = 'Пароль от 6 символов'; msg.style.color = '#f23f43'; return; }
 
   try {
     const res = await fetch('/api/verify-register', {
@@ -177,6 +204,7 @@ document.getElementById('finishBtn').onclick = async function() {
   }
 };
 
+// ВХОД
 document.getElementById('loginBtn').onclick = async function() {
   const username = document.getElementById('loginUsername').value.trim();
   const password = document.getElementById('loginPassword').value.trim();

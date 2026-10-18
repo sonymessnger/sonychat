@@ -9,6 +9,7 @@
 <body>
 <div class="card">
 
+  <!-- ШАГ 1: Email -->
   <div class="step" id="step1">
     <h1>SonyChat</h1>
     <p class="subtitle">Регистрация</p>
@@ -18,6 +19,7 @@
     <p class="switch">Уже есть аккаунт? <a href="#" id="toLogin">Войти</a></p>
   </div>
 
+  <!-- ШАГ 2: Код -->
   <div class="step" id="step2" style="display:none">
     <h1>Введите код</h1>
     <p class="subtitle">Код отправлен на <span id="emailLabel"></span></p>
@@ -27,6 +29,7 @@
     <p class="switch"><a href="#" id="back1">← Назад</a></p>
   </div>
 
+  <!-- ШАГ 3: Добро пожаловать -->
   <div class="step welcome" id="step3" style="display:none">
     <div class="welcome-icon">✨</div>
     <h1>Добро пожаловать<br>в SonyChat!</h1>
@@ -34,6 +37,7 @@
     <button id="startSetupBtn">Продолжить</button>
   </div>
 
+  <!-- ШАГ 4: Аватар -->
   <div class="step" id="step4" style="display:none">
     <h1>Выберите аватар</h1>
     <p class="subtitle">Нажмите на понравившийся</p>
@@ -44,16 +48,23 @@
     <p class="msg" id="msg4"></p>
   </div>
 
+  <!-- ШАГ 5: Юзернейм + пароль + капча -->
   <div class="step" id="step5" style="display:none">
     <h1>Ваш профиль</h1>
     <p class="subtitle">Придумайте имя пользователя</p>
     <div class="avatar-preview" id="chosenAvatar"></div>
     <input type="text" id="username" placeholder="Имя пользователя" maxlength="20">
-    <input type="password" id="password" placeholder="Пароль">
+    <input type="password" id="password" placeholder="Пароль (мин. 6 символов)">
+    <div class="captcha-box">
+      <label class="captcha-label">🤖 Проверка на робота</label>
+      <div class="captcha-question" id="captchaQuestion">— + — = ?</div>
+      <input type="number" id="captchaAnswer" placeholder="Ваш ответ">
+    </div>
     <button id="finishBtn">Зарегистрироваться</button>
     <p class="msg" id="msg5"></p>
   </div>
 
+  <!-- ВХОД -->
   <div class="step" id="loginBox" style="display:none">
     <h1>Вход</h1>
     <p class="subtitle">Рады видеть снова!</p>

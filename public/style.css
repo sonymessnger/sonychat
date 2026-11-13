@@ -1,320 +1,82 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: "Segoe UI", Tahoma, sans-serif;
+  font-family: "Segoe UI", Roboto, sans-serif;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(ellipse at top, #2d1b4e 0%, #1a0f2e 40%, #0a0515 100%);
+  background: linear-gradient(135deg, #e0f2fe 0%, #f0f8ff 100%);
+  color: #1e293b;
   position: relative;
-  overflow: hidden;
-  color: #e8d5ff;
 }
 
-/* Летучие мыши и тыквы на фоне */
 body::before {
-  content: '🦇  🎃  🦇  🕷️  🦇  🎃  🦇  👻  🦇  🎃';
+  content: '❄️   ❅   ❆   ❄️   ❅   ❆   ❄️';
   position: absolute;
-  top: 20px;
-  left: 0;
-  right: 0;
+  top: 20px; left: 0; right: 0;
   text-align: center;
-  font-size: 26px;
-  opacity: 0.3;
-  letter-spacing: 30px;
-  pointer-events: none;
-  animation: floatBats 6s ease-in-out infinite;
-}
-
-body::after {
-  content: '🎃  🦇  👻  🕸️  🎃  🦇  👻  🕸️  🎃';
-  position: absolute;
-  bottom: 20px;
-  left: 0;
-  right: 0;
-  text-align: center;
-  font-size: 22px;
-  opacity: 0.25;
+  font-size: 24px;
+  opacity: 0.2;
   letter-spacing: 40px;
   pointer-events: none;
-  animation: floatBats 8s ease-in-out infinite reverse;
 }
 
-@keyframes floatBats {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
-}
-
-/* Карточка с оранжевым свечением */
 .card {
+  width: 380px;
+  max-width: 90%;
+  padding: 40px 30px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 32px;
+  box-shadow: 0 20px 40px rgba(148, 163, 184, 0.2);
   position: relative;
-  width: 340px;
-  padding: 40px 35px;
-  text-align: center;
-  background: linear-gradient(180deg,
-    rgba(45, 27, 78, 0.95) 0%,
-    rgba(30, 15, 55, 0.98) 100%);
-  border: 2px solid #ff6b1a;
-  border-radius: 16px;
-  box-shadow:
-    0 0 30px rgba(255, 107, 26, 0.5),
-    0 0 60px rgba(255, 107, 26, 0.2),
-    inset 0 1px 0 rgba(255, 150, 100, 0.2);
-  z-index: 2;
+  z-index: 1;
 }
 
-/* Тыква сверху карточки */
-.card::before {
-  content: '🎃';
-  position: absolute;
-  top: -30px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 48px;
-  filter: drop-shadow(0 0 15px rgba(255, 107, 26, 0.9));
-  animation: pumpkinGlow 2s ease-in-out infinite;
-}
-
-@keyframes pumpkinGlow {
-  0%, 100% { filter: drop-shadow(0 0 15px rgba(255, 107, 26, 0.9)); }
-  50% { filter: drop-shadow(0 0 25px rgba(255, 140, 50, 1)); }
-}
-
-h1 {
-  color: #ffb87a;
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  text-shadow: 0 0 15px rgba(255, 107, 26, 0.8), 0 0 30px rgba(255, 107, 26, 0.4);
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  color: #a88cc0;
-  font-size: 13px;
-  margin-bottom: 20px;
-  font-weight: 600;
-  text-align: center;
-}
+h1 { color: #0f172a; font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+.subtitle { color: #64748b; font-size: 14px; margin-bottom: 24px; font-weight: 500; }
 
 input {
-  width: 100%;
-  padding: 12px 16px;
-  margin: 8px 0;
-  font-size: 14px;
-  font-family: "Segoe UI", Tahoma, sans-serif;
-  background: rgba(20, 8, 40, 0.9);
-  border: 1px solid rgba(255, 107, 26, 0.5);
-  border-radius: 10px;
-  color: #e8d5ff;
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
-  transition: all 0.2s;
+  width: 100%; padding: 16px 20px; margin: 8px 0; font-size: 15px; font-family: inherit;
+  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 100px; color: #1e293b; transition: all 0.2s;
 }
-input::placeholder { color: #8060a0; }
-input:focus {
-  outline: none;
-  border-color: #ff6b1a;
-  box-shadow: 0 0 15px rgba(255, 107, 26, 0.6), inset 0 2px 5px rgba(0, 0, 0, 0.3);
-}
+input::placeholder { color: #94a3b8; }
+input:focus { outline: none; background: #ffffff; border-color: #7dd3fc; box-shadow: 0 0 0 4px rgba(125, 211, 252, 0.2); }
 
 button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  font-size: 15px;
-  font-weight: 700;
-  font-family: "Segoe UI", Tahoma, sans-serif;
-  color: #fff;
-  border: 1px solid #ffb87a;
-  border-radius: 10px;
-  cursor: pointer;
-  background: linear-gradient(180deg, #ff8a3a 0%, #ff6b1a 50%, #d85000 100%);
-  text-shadow: 0 1px 2px rgba(120, 40, 0, 0.5);
-  box-shadow: 0 0 15px rgba(255, 107, 26, 0.5), inset 0 1px 0 rgba(255, 220, 180, 0.4);
-  transition: all 0.15s;
+  width: 100%; padding: 16px; margin-top: 12px; font-size: 16px; font-weight: 700; font-family: inherit;
+  color: #fff; border: none; border-radius: 100px; cursor: pointer; background: #38bdf8; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4); transition: all 0.2s;
 }
-button:hover { filter: brightness(1.15); transform: translateY(-1px); }
-button:active { transform: translateY(1px); }
-button:disabled { opacity: 0.5; cursor: not-allowed; }
+button:hover { background: #0ea5e9; transform: translateY(-2px); }
+button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+button.secondary { background: #f1f5f9; color: #475569; box-shadow: none; }
+button.secondary:hover { background: #e2e8f0; }
 
-button.secondary {
-  background: linear-gradient(180deg, #6030a0 0%, #401880 100%);
-  border-color: #a060e0;
-  box-shadow: 0 0 15px rgba(150, 80, 220, 0.5), inset 0 1px 0 rgba(200, 160, 255, 0.3);
-  text-shadow: 0 1px 2px rgba(40, 0, 80, 0.6);
-}
+.msg { margin-top: 16px; font-size: 14px; font-weight: 700; min-height: 20px; text-align: center; }
+.switch { font-size: 14px; margin-top: 20px; color: #64748b; }
+.switch a { color: #0284c7; font-weight: 700; text-decoration: none; }
 
-.msg {
-  margin-top: 12px;
-  font-size: 13px;
-  font-weight: 600;
-  min-height: 18px;
-  text-align: center;
-}
+.welcome-icon { font-size: 72px; margin-bottom: 16px; filter: drop-shadow(0 4px 10px rgba(56, 189, 248, 0.4)); }
+.welcome h1 { font-size: 28px; line-height: 1.3; margin-bottom: 8px; }
 
-.switch {
-  font-size: 12px;
-  margin-top: 15px;
-  color: #a88cc0;
-  text-align: center;
-}
-.switch a {
-  color: #ffb87a;
-  font-weight: 700;
-  text-decoration: none;
-  text-shadow: 0 0 8px rgba(255, 107, 26, 0.6);
-}
-.switch a:hover { text-decoration: underline; color: #ffd0a0; }
-
-/* Шаг "Добро пожаловать" */
-.welcome { text-align: center; padding: 20px 0; }
-.welcome-icon {
-  font-size: 72px;
-  margin-bottom: 15px;
-  animation: pulse 1.5s infinite;
-  filter: drop-shadow(0 0 20px rgba(255, 107, 26, 0.8));
-}
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-}
-.welcome h1 {
-  color: #ffb87a;
-  font-size: 26px;
-  line-height: 1.3;
-  margin-bottom: 10px;
-  text-shadow: 0 0 20px rgba(255, 107, 26, 0.9), 0 0 40px rgba(255, 107, 26, 0.5);
-}
-
-/* Сетка аватарок */
-.avatar-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin: 15px 0;
-}
-
+.avatar-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0; }
 .avatar-choice {
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  cursor: pointer;
-  border: 3px solid transparent;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-  transition: all 0.15s;
+  width: 100%; aspect-ratio: 1; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 32px; cursor: pointer; transition: transform 0.2s; border: 2px solid transparent;
 }
-.avatar-choice:hover {
-  transform: scale(1.08);
-  box-shadow: 0 0 15px rgba(255, 107, 26, 0.6);
-}
-.avatar-choice.selected {
-  border-color: #ff6b1a;
-  box-shadow: 0 0 0 3px rgba(255, 107, 26, 0.5), 0 0 20px rgba(255, 107, 26, 0.9);
-  transform: scale(1.08);
-}
+.avatar-choice:hover { transform: scale(1.1); }
+.avatar-choice.selected { border-color: #38bdf8; box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.3); transform: scale(1.1); }
 
 .avatar-preview {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  margin: 15px auto;
-  background: linear-gradient(135deg, #ff6b1a, #a04010);
-  border: 4px solid #ffb87a;
-  box-shadow: 0 0 25px rgba(255, 107, 26, 0.7);
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 40px;
-  font-weight: bold;
+  width: 110px; height: 110px; border-radius: 50%; margin: 0 auto 20px; background: #e0f2fe; background-size: cover; background-position: center;
+  display: flex; align-items: center; justify-content: center; font-size: 48px; color: #0284c7; border: 4px solid #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-/* Код подтверждения */
-.code-row {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin: 8px 0;
-}
-.code-row input { flex: 1; margin: 0; }
-.small-btn {
-  width: auto;
-  padding: 12px 16px;
-  margin: 0;
-  font-size: 13px;
-  white-space: nowrap;
-}
-/* ===== КАПЧА ===== */
-.captcha-box {
-  background: rgba(20, 8, 40, 0.7);
-  border: 1px dashed rgba(255, 107, 26, 0.6);
-  border-radius: 10px;
-  padding: 12px 15px;
-  margin: 12px 0;
-}
-
-.captcha-label {
-  display: block;
-  color: #ffb87a;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-
-.captcha-question {
-  color: #fff;
-  font-size: 24px;
-  font-weight: 800;
-  text-align: center;
-  letter-spacing: 3px;
-  padding: 8px;
-  margin-bottom: 8px;
-  background: linear-gradient(180deg, rgba(255, 107, 26, 0.25), rgba(160, 60, 20, 0.15));
-  border-radius: 8px;
-  text-shadow: 0 0 10px rgba(255, 107, 26, 0.8);
-  animation: captchaPulse 3s ease-in-out infinite;
-}
-
-@keyframes captchaPulse {
-  0%, 100% { box-shadow: 0 0 10px rgba(255, 107, 26, 0.3); }
-  50% { box-shadow: 0 0 20px rgba(255, 107, 26, 0.7); }
-}
-
-#captchaAnswer {
-  width: 100%;
-  text-align: center;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  background: rgba(20, 8, 40, 0.95);
-  border: 1px solid rgba(255, 107, 26, 0.5);
-  border-radius: 8px;
-  color: #ffb87a;
-  padding: 10px;
-  font-family: inherit;
-  transition: all 0.2s ease;
-  box-sizing: border-box;
-  margin-top: 8px;
-}
-
-#captchaAnswer:focus {
-  outline: none;
-  border-color: #ff6b1a;
-  box-shadow: 0 0 15px rgba(255, 107, 26, 0.7);
-}
-
-#captchaAnswer::placeholder {
-  color: #8060a0;
-  letter-spacing: 0;
-  font-weight: 400;
-  font-size: 14px;
-}
+.captcha-box { background: #f8fafc; border-radius: 20px; padding: 16px; margin: 16px 0; border: 1px solid #e2e8f0; }
+.captcha-label { display: block; color: #0284c7; font-size: 12px; font-weight: 800; margin-bottom: 8px; text-transform: uppercase; }
+.captcha-question { color: #0f172a; font-size: 24px; font-weight: 800; margin-bottom: 12px; }
+#captchaAnswer { margin: 0; text-align: center; font-size: 18px; font-weight: 700; }

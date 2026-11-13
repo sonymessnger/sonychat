@@ -1,175 +1,28 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: "Segoe UI", Tahoma, sans-serif;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 30px 20px;
-  background: radial-gradient(ellipse at top, #2d1b4e 0%, #1a0f2e 40%, #0a0515 100%);
-  color: #e8d5ff;
-  position: relative;
-  overflow: hidden;
-  animation: fadeIn 0.5s ease;
+  font-family: "Segoe UI", Roboto, sans-serif; min-height: 100vh; display: flex; justify-content: center; align-items: center;
+  padding: 20px; background: linear-gradient(135deg, #e0f2fe 0%, #f0f8ff 100%); color: #1e293b;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* Летучие мыши и тыквы на фоне */
-body::before {
-  content: '🦇  🎃  🦇  🕷️  🦇  🎃  🦇';
-  position: absolute;
-  top: 15px; left: 0; right: 0;
-  text-align: center;
-  font-size: 26px;
-  opacity: 0.28;
-  letter-spacing: 35px;
-  pointer-events: none;
-  animation: floatBats 8s ease-in-out infinite;
-}
-
-body::after {
-  content: '🎃  🦇  👻  🕸️  🎃  🦇  👻  🕸️  🎃';
-  position: absolute;
-  bottom: 15px; left: 0; right: 0;
-  text-align: center;
-  font-size: 22px;
-  opacity: 0.22;
-  letter-spacing: 40px;
-  pointer-events: none;
-  animation: floatBats 8s ease-in-out infinite reverse;
-}
-
-@keyframes floatBats {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
-}
-
-/* Карточка с тыквой и свечением */
 .card {
-  width: 100%;
-  max-width: 400px;
-  padding: 55px 30px 35px 30px;
-  text-align: center;
-  background: linear-gradient(180deg,
-    rgba(45, 27, 78, 0.96) 0%,
-    rgba(30, 15, 55, 0.98) 100%);
-  border: 2px solid #ff6b1a;
-  border-radius: 18px;
-  box-shadow:
-    0 0 35px rgba(255, 107, 26, 0.5),
-    0 0 70px rgba(255, 107, 26, 0.2),
-    inset 0 1px 0 rgba(255, 150, 100, 0.2);
-  position: relative;
-  z-index: 2;
-  animation: cardIn 0.5s ease;
+  width: 100%; max-width: 400px; padding: 32px 24px; text-align: center;
+  background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 32px; box-shadow: 0 20px 40px rgba(148, 163, 184, 0.2);
 }
 
-@keyframes cardIn {
-  from { opacity: 0; transform: scale(0.85); }
-  to { opacity: 1; transform: scale(1); }
-}
+h1 { color: #0f172a; font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+.subtitle { color: #64748b; font-size: 14px; margin-bottom: 24px; }
 
-/* Тыква сверху */
-.card::before {
-  content: '🎃';
-  position: absolute;
-  top: -38px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 60px;
-  filter: drop-shadow(0 0 20px rgba(255, 107, 26, 1));
-  animation: pumpkinGlow 2s ease-in-out infinite;
-}
-
-@keyframes pumpkinGlow {
-  0%, 100% { filter: drop-shadow(0 0 15px rgba(255, 107, 26, 0.9)); }
-  50% { filter: drop-shadow(0 0 28px rgba(255, 140, 50, 1)); }
-}
-
-h1 {
-  color: #ffb87a;
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  text-shadow: 0 0 15px rgba(255, 107, 26, 0.9), 0 0 30px rgba(255, 107, 26, 0.4);
-  letter-spacing: 1px;
-}
-
-/* Аватар-превью */
 .avatar-preview {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  margin: 15px auto 25px;
-  background: linear-gradient(135deg, #ff6b1a, #a04010);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 64px;
-  font-weight: bold;
-  background-size: cover;
-  background-position: center;
-  border: 4px solid #ffb87a;
-  box-shadow: 0 0 30px rgba(255, 107, 26, 0.8), inset 0 2px 6px rgba(0, 0, 0, 0.3);
-  text-shadow: 0 2px 6px rgba(0, 30, 70, 0.6);
-  animation: avatarPulse 3s ease-in-out infinite;
+  width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 24px; background: #e0f2fe; background-size: cover; background-position: center;
+  display: flex; align-items: center; justify-content: center; font-size: 64px; color: #0284c7; border: 4px solid #fff; box-shadow: 0 8px 25px rgba(56, 189, 248, 0.3);
 }
 
-@keyframes avatarPulse {
-  0%, 100% { box-shadow: 0 0 25px rgba(255, 107, 26, 0.7), inset 0 2px 6px rgba(0, 0, 0, 0.3); }
-  50% { box-shadow: 0 0 45px rgba(255, 140, 50, 1), inset 0 2px 6px rgba(0, 0, 0, 0.3); }
-}
+.choose, .back { width: 100%; padding: 16px; margin-top: 12px; border: none; border-radius: 100px; cursor: pointer; font-weight: 700; font-size: 15px; font-family: inherit; transition: all 0.2s; }
+.choose { background: #38bdf8; color: #fff; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4); }
+.choose:hover { background: #0ea5e9; transform: translateY(-2px); }
+.back { background: #f1f5f9; color: #475569; }
+.back:hover { background: #e2e8f0; }
 
-/* Кнопки */
-.choose, .back {
-  width: 100%;
-  padding: 13px;
-  margin-top: 10px;
-  border: 1px solid #ff6b1a;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 15px;
-  font-family: inherit;
-  color: #fff;
-  background: linear-gradient(180deg, #ff8a3a 0%, #ff6b1a 50%, #d85000 100%);
-  text-shadow: 0 1px 2px rgba(120, 40, 0, 0.5);
-  box-shadow: 0 0 15px rgba(255, 107, 26, 0.5), inset 0 1px 0 rgba(255, 220, 180, 0.4);
-  transition: all 0.25s ease;
-}
-
-.choose:hover, .back:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 25px rgba(255, 107, 26, 0.9), inset 0 1px 0 rgba(255, 220, 180, 0.4);
-}
-
-.choose:active, .back:active {
-  transform: translateY(1px);
-}
-
-/* Кнопка "Назад" — фиолетовая, чтобы отличалась */
-.back {
-  background: linear-gradient(180deg, #a060e0 0%, #6020a0 100%);
-  border-color: #a060e0;
-  box-shadow: 0 0 15px rgba(160, 96, 224, 0.5), inset 0 1px 0 rgba(200, 160, 255, 0.3);
-}
-.back:hover {
-  box-shadow: 0 0 25px rgba(160, 96, 224, 0.9), inset 0 1px 0 rgba(200, 160, 255, 0.3);
-}
-
-/* Сообщение */
-#message {
-  min-height: 22px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #a5ff8a;
-  margin: 12px 0;
-  text-shadow: 0 0 8px rgba(100, 255, 100, 0.5);
-  animation: fadeIn 0.4s ease;
-}
+#message { min-height: 24px; font-size: 14px; font-weight: 700; color: #0284c7; margin-top: 16px; }

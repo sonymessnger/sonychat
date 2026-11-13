@@ -4,38 +4,24 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (db) => {
   const router = express.Router();
-  const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
+  const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
   router.post('/register', async (req, res) => {
-    const { username, password } = req.body;
-    if (!username || !password) return res.status(400).json({ message: 'Заполните все поля' });
-
-    try {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword], function(err) {
-        if (err) {
-          if (err.message.includes('UNIQUE')) {
-            return res.status(400).json({ message: 'Пользователь уже существует' });
-          }
-          return res.status(500).json({ message: 'Ошибка сервера' });
-        }
-        res.status(201).json({ message: 'Пользователь создан!' });
-      });
-    } catch (error) {
-      res.status(500).json({ message: 'Ошибка сервера' });
-    }
+    // ... оставляем как было, если нужно
+    res.status(400).json({ message: 'Используйте регистрацию по коду' });
   });
 
   router.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    db.get('SELECT * FROM users WHERE username = ?', [username], async (err, user) => {
-      if (err || !user) return res.status(400).json({ message: 'Неверный логин или пароль' });
+    db.get('SELECT * FROM users WHERE username = ?', [req.body.username], async (err, user) => {
+      if (err || !user) return res.status(400).json({ message: 'Неверный логин' });
+      if (user.is_deleted === 1) return res.status(403).json({ message: 'Этот аккаунт был удалён' });
+      if (user.banned === 1) return res.status(403).json({ message: 'Аккаунт заблокирован' });
 
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) return res.status(400).json({ message: 'Неверный логин или пароль' });
+      const ok = await bcrypt.compare(req.body.password, user.password);
+      if (!ok) return res.status(400).json({ message: 'Неверный пароль' });
 
       const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
-      res.json({ token, userId: user.id, username: user.username });
+      res.json({ token, username: user.username });
     });
   });
 

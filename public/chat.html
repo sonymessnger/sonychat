@@ -8,24 +8,31 @@
 </head>
 <body>
 <div class="app">
+  <!-- СПИСОК ЧАТОВ (Sidebar) -->
   <aside class="sidebar" id="sidebar">
     <div class="profile">
       <div class="avatar" id="userAvatar" title="Меню профиля">A</div>
       <div><div class="username" id="currentUser">admin</div><div class="status">● онлайн</div></div>
     </div>
-    <div class="section-title">Чаты</div>
+
+    <div class="section-title" id="sectionTitle">Чаты</div>
     <ul class="contacts" id="contactsList"></ul>
     <button class="logout" id="logoutBtn">Выйти</button>
   </aside>
 
+  <!-- ОКНО ЧАТА -->
   <main class="chat" id="mainChat">
     <header class="chat-header">
-      <button class="back-btn" id="backBtn">←</button>
-      <button class="menu-btn" id="menuBtn">☰</button>
+      <button class="back-btn" id="backBtn" title="Назад">←</button>
       <div class="avatar small" id="chatAvatar">О</div>
-      <div><div class="chat-title" id="chatTitle">Общий чат</div><div class="chat-subtitle" id="chatSubtitle">Все пользователи</div></div>
+      <div>
+        <div class="chat-title" id="chatTitle">Общий чат</div>
+        <div class="chat-subtitle" id="chatSubtitle">Все пользователи</div>
+      </div>
     </header>
+    
     <div class="messages" id="messages"><div class="system-msg">Сообщений пока нет</div></div>
+    
     <div class="input-area">
       <input type="file" id="fileInput" accept="image/*" style="display:none">
       <button class="attach-btn" id="attachBtn">📎</button>
@@ -35,15 +42,19 @@
   </main>
 </div>
 
-<!-- НИЖНЯЯ НАВИГАЦИЯ (только на телефоне) -->
+<!-- НИЖНЯЯ НАВИГАЦИЯ (только для телефона) -->
 <nav class="bottom-nav" id="bottomNav">
-  <button class="nav-btn active" data-tab="chats">
+  <button class="nav-btn active" id="navChats">
     <span class="nav-icon">💬</span>
     <span class="nav-label">Чаты</span>
   </button>
-  <button class="nav-btn" data-tab="calls">
-    <span class="nav-icon">📞</span>
-    <span class="nav-label">Звонки</span>
+  <button class="nav-btn" id="navContacts">
+    <span class="nav-icon">👥</span>
+    <span class="nav-label">Контакты</span>
+  </button>
+  <button class="nav-btn" id="navProfile">
+    <span class="nav-icon">👤</span>
+    <span class="nav-label">Профиль</span>
   </button>
 </nav>
 
